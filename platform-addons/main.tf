@@ -26,3 +26,9 @@ module "local_path_provisioner" {
   local_path = "/data/shared"
   depends_on = [module.calico]
 }
+
+module "nginx_ingress" {
+  source                   = "git::https://github.com/tenzin-io/terraform-modules.git//kubernetes/ingress-nginx?ref=main"
+  enable_cloudflare_tunnel = true
+  cloudflare_tunnel_token  = var.cloudflare_tunnel_token
+}
