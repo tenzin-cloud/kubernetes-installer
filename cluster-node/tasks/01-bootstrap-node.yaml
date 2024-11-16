@@ -21,16 +21,17 @@
     creates: /etc/kubernetes/admin.conf
   when: skip_phase_mark_control_plane == False
 
-- name: Wait for port 6443 to be ready
-  wait_for:
-    host: 127.0.0.1
-    port: 6443
-    delay: 30
-
 - name: Read the admin.conf file
   slurp:
     src: /etc/kubernetes/admin.conf
   register: kubernetes_admin_conf
+
+- name: Setup ease of use
+  copy:
+    dest: /root/.bashrc
+    content: |-
+      export KUBECONFIG=/etc/kubernetes/admin.conf
+      alias k=kubectl
 
 - name: Upload control plane certs
   command: kubeadm init phase upload-certs --upload-certs
