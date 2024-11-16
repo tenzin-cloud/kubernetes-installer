@@ -10,4 +10,6 @@ service_network_cidr: 10.254.0.0/16
 # keepalived
 enable_keepalived: False
 keepalived_router_id: 100
+keepalived_interface: eth0
+keepalived_virtual_address: 127.0.0.1
 keepalived_cluster_password: clusterpass
