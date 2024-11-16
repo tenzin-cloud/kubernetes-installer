@@ -1,0 +1,11 @@
+---
+- name: Prepare system
+  hosts: localhost
+  connection: local
+
+  vars_files:
+    - vars.yaml
+
+  tasks:
+    - name: Include tasks
+      include_tasks: tasks/main.yaml
