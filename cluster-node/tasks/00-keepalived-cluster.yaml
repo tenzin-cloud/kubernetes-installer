@@ -23,6 +23,10 @@
     dest: /etc/keepalived/check_port.sh
     mode: 0755
 
+- name: Set keepalived priority
+  set_fact:
+    keepalived_priority: "{{ 200 if node_type == 'bootstrap_node' else 100 }}"
+
 - name: Send keepalived.conf
   template:
     src: keepalived.conf
