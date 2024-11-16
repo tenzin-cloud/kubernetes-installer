@@ -3,6 +3,12 @@
   hosts: localhost
   connection: local
 
+  vars_file:
+    - vars.yaml
+
   tasks:
-    - debug:
-      msg: "Doing things"
+    - name: Install kubeadm
+      get_url:
+        url: "{{ lookup('eks_release', 'kubeadm', eks_release_arch, eks_release_os) }}"
+        dest: /usr/bin/kubeadm
+        mode: 0755
