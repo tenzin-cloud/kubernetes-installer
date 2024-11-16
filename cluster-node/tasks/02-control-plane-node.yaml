@@ -1,18 +1,4 @@
 ---
-# - name: Upload control plane certs
-#   command: kubeadm init phase upload-certs --upload-certs
-#   register: upload_certs
-#   when: node_type == 'bootstrap_node'
-# 
-# - name: Generate control plane join command
-#   shell: 'kubeadm token create --print-join-command --certificate-key {{ upload_certs.stdout_lines[-1] }} > /data/shared/.control-plane-join'
-#   register: join_command
-# 
-# - name: Join node as control plane to Kubernetes cluster
-#   command: "{{ join_command.stdout }}"
-#   args:
-#     creates: /etc/kubernetes/kubelet.conf
-#
 - name: Wait for the file to appear
   wait_for:
     path: /data/shared/.control-plane-join
