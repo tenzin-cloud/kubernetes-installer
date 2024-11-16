@@ -27,6 +27,8 @@
   template:
     src: keepalived.conf
     dest: /etc/keepalived/keepalived.conf
-  notify: restart keepalived
 
-- meta: flush_handlers
+- name: restart keepalived
+  service:
+    name: keepalived
+    state: restarted
