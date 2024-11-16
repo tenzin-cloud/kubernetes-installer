@@ -1,11 +1,26 @@
 ---
-# - name: Generate worker node join command
-#   command: 'kubeadm token create --print-join-command > /data/shared/worker-node-join'
-#   register: join_command
-# 
-# - name: Join node as worker to Kubernetes cluster
-#   command: "{{ join_command.stdout }}"
-#   args:
-#     creates: /etc/kubernetes/kubelet.conf
-# 
-...
+- name: Wait for the file to appear
+  wait_for:
+    path: /data/shared/.worker-node-join
+    timeout: 300
+  register: wait_result
+
+- name: Fail if the file did not appear in time
+  fail:
+    msg: "File did not appear within the 300s timeout period."
+  when: not wait_result.elapsed
+
+- name: Read the file contents
+  slurp:
+    src: /data/shared/.worker-node-join
+  register: join_command
+
+- name: Decode the file contents
+  set_fact:
+    script_content: "{{ join_command.content | b64decode }}"
+
+- name: Execute the file as a shell script
+  shell: |
+    {{ script_content }}
+  args:
+    executable: /bin/bash
