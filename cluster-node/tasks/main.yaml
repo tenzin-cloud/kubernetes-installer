@@ -1,6 +1,6 @@
 ---
 - include_tasks: 00-keepalived-cluster.yaml
-  when: node_type == 'bootstrap_node' || node_type == 'control_plane'
+  when: node_type == 'bootstrap_node' or node_type == 'control_plane'
 
 - include_tasks: 01-bootstrap-node.yaml
   when: node_type == 'bootstrap_node'
