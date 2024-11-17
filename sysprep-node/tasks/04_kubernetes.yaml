@@ -6,17 +6,17 @@
     update_cache: True
   loop:
     - apt-transport-https
-    - ca-certificates
-    - curl
-    - gnupg
+    # - ca-certificates
+    # - curl
+    # - gnupg
     - conntrack
-    - ethtool
+    # - ethtool
     - ipvsadm
-    - jq
+    # - jq
     - socat
     - pigz
     - chrony
-    - iptables
+    # - iptables
 
 - name: Install kubeadm
   get_url:
