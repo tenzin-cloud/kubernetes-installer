@@ -24,10 +24,3 @@ networking:
   serviceSubnet: "{{ service_network_cidr }}"
   podSubnet: "{{ pod_network_cidr }}"
 ...
----
-apiVersion: kubeadm.k8s.io/v1beta4
-kind: JoinConfiguration
-controlPlane:
-  localAPIEndpoint:
-    bindPort: "{{ control_plane_listen_port }}"
-...

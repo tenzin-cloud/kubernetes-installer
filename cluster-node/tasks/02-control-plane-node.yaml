@@ -21,6 +21,6 @@
 
 - name: Execute the file as a shell script
   shell: |
-    {{ script_content }}
+    {{ script_content }} --apiserver-bind-port {{ control_plane_listen_port }}
   args:
     executable: /bin/bash
