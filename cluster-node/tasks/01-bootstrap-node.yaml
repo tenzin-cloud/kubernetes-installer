@@ -26,10 +26,10 @@
     src: /etc/kubernetes/admin.conf
   register: kubernetes_admin_conf
 
-- name: Wait for port 6443 to be ready
+- name: Wait for port to be ready
   wait_for:
     host: 127.0.0.1
-    port: 6443
+    port: "{{ control_plane_listen_port }}"
     delay: 30
 
 - name: Setup ease of use
