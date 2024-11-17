@@ -2,7 +2,7 @@
 apiVersion: kubeadm.k8s.io/v1beta4
 kind: InitConfiguration
 localAPIEndpoint:
-  bindPort: 8001
+  bindPort: {{ control_plane_listen_port }}
 ...
 ---
 apiVersion: kubeadm.k8s.io/v1beta4
@@ -11,7 +11,7 @@ apiServer:
   extraArgs:
   - name: anonymous-auth
     value: "true"
-{% if control_plane_endpoint_alternative_names |length > 0 %}
+{% if control_plane_endpoint_alternative_names | length > 0 %}
   certSANs:
 {% for alternative_name in control_plane_endpoint_alternative_names %}
     - "{{ alternative_name }}"
