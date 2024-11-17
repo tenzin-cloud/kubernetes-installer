@@ -17,7 +17,7 @@
 
 - name: Decode the file contents
   set_fact:
-    script_content: "{{ join_command.content | b64decode }}"
+    script_content: "{{ join_command.content | b64decode | trim }}"
 
 - name: Execute the file as a shell script
   shell: |
