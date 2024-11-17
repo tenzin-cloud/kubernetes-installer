@@ -16,3 +16,6 @@ cni_plugins_os: linux
 crictl_version: 1.31.1
 crictl_arch: amd64 # amd64 || arm64
 crictl_os: linux
+
+docker_hub_username: ""
+docker_hub_token: ""

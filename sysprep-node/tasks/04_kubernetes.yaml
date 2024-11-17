@@ -51,6 +51,51 @@
     url: https://raw.githubusercontent.com/kubernetes/release/v0.16.5/cmd/krel/templates/latest/kubeadm/10-kubeadm.conf
     dest: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 
+- name: Send over kubelet extra args addition
+  copy:
+    dest: /etc/systemd/system/kubelet.service.d/00-kubelet.conf
+    content: |-
+      Environment="KUBELET_EXTRA_ARGS=--image-credential-provider-bin-dir=/etc/kubernetes --image-credential-provider-config=/etc/kubernetes/credential-provider-config.yaml"
+  when: docker_hub_username | length > 0 and docker_hub_token | length > 0
+
+- name: Send over credential provider
+  copy:
+    dest: /etc/kubernetes/docker-credential-provider
+    mode: 0755
+    content: |-
+      #!/bin/bash
+
+      cat <<EOF
+      {
+        "kind": "CredentialProviderResponse",
+        "apiVersion": "credentialprovider.kubelet.k8s.io/v1",
+        "cacheKeyType": "Registry",
+        "auth": {
+          "https://index.docker.io/v1/": {
+            "username": "{{ docker_hub_username }}",
+            "password": "{{ docker_hub_token }}"
+          }
+        }
+      }
+      EOF
+  when: docker_hub_username | length > 0 and docker_hub_token | length > 0
+
+- name: Send over credential provider config
+  copy:
+    dest: /etc/kubernetes/credential-provider-config.yaml
+    content: |-
+      apiVersion: kubelet.config.k8s.io/v1
+      kind: CredentialProviderConfig
+      providers:
+      - name: "docker-credential-provider"
+        apiVersion: credentialprovider.kubelet.k8s.io/v1
+        matchImages:
+        - "*.docker.io"            # Match any images from docker.io
+        - "docker.io"              # Explicitly match docker.io
+        - "index.docker.io"        # Match index.docker.io
+        defaultCacheDuration: "1h" # Cache credentials for 1 hour
+  when: docker_hub_username | length > 0 and docker_hub_token | length > 0
+
 - name: Reload systemd
   systemd:
     daemon_reload: yes
