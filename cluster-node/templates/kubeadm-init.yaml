@@ -11,7 +11,7 @@ apiServer:
   extraArgs:
   - name: anonymous-auth
     value: "true"
-  - name: bind-port
+  - name: secure-port
     value: "{{ control_plane_listen_port }}"
 {% if control_plane_endpoint_alternative_names | length > 0 %}
   certSANs:
