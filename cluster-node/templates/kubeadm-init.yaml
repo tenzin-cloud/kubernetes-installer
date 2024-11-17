@@ -12,7 +12,7 @@ apiServer:
   - name: anonymous-auth
     value: "true"
   - name: bind-port
-    value: {{ control_plane_listen_port }}
+    value: "{{ control_plane_listen_port }}"
 {% if control_plane_endpoint_alternative_names | length > 0 %}
   certSANs:
 {% for alternative_name in control_plane_endpoint_alternative_names %}
