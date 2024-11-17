@@ -51,16 +51,21 @@
     url: https://raw.githubusercontent.com/kubernetes/release/v0.16.5/cmd/krel/templates/latest/kubeadm/10-kubeadm.conf
     dest: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 
+- name: Create /etc/sysconfig folder
+  file:
+    path: /etc/sysconfig
+    state: directory
+
 - name: Send over kubelet extra args addition
   copy:
-    dest: /etc/systemd/system/kubelet.service.d/00-kubelet.conf
+    dest: /etc/sysconfig/kubelet
     content: |-
-      Environment="KUBELET_EXTRA_ARGS=--image-credential-provider-bin-dir=/etc/kubernetes --image-credential-provider-config=/etc/kubernetes/credential-provider-config.yaml"
+      KUBELET_EXTRA_ARGS="--image-credential-provider-bin-dir=/usr/local/bin --image-credential-provider-config=/credential-provider-config.yaml"
   when: docker_hub_user | length > 0 and docker_hub_token | length > 0
 
 - name: Send over credential provider
   copy:
-    dest: /etc/kubernetes/docker-credential-provider
+    dest: /usr/local/bin/docker-credential-provider
     mode: 0755
     content: |-
       #!/bin/bash
@@ -82,7 +87,7 @@
 
 - name: Send over credential provider config
   copy:
-    dest: /etc/kubernetes/credential-provider-config.yaml
+    dest: /credential-provider-config.yaml
     content: |-
       apiVersion: kubelet.config.k8s.io/v1
       kind: CredentialProviderConfig
