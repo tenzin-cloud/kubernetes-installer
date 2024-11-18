@@ -7,7 +7,7 @@
       - keepalived_cluster_password is defined
 
 - name: Find the first network interface for keepalived
-  command: find /sys/class/net/enp* | head -n1 | xargs -n1 basename
+  shell: find /sys/class/net/ -type l -name enp* -print -quit | xargs basename
   register: interface_result
 
 - name: Set fact with the keepalived interface
