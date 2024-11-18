@@ -1,7 +1,7 @@
 ---
 - name: Wait for the file to appear
   wait_for:
-    path: "{{ shared_filesystem_path }}/.worker-node-join"
+    path: "{{ cluster_filesystem_path }}/.worker-node-join"
     timeout: 300
   register: wait_result
 
@@ -12,7 +12,7 @@
 
 - name: Read the file contents
   slurp:
-    src: "{{ shared_filesystem_path }}/.worker-node-join"
+    src: "{{ cluster_filesystem_path }}/.worker-node-join"
   register: join_command
 
 - name: Decode the file contents

@@ -23,7 +23,7 @@ module "calico" {
 
 module "local_path_provisioner" {
   source     = "git::https://github.com/tenzin-io/terraform-modules.git//kubernetes/local-path-provisioner?ref=main"
-  local_path = var.shared_filesystem_path
+  local_path = var.cluster_filesystem_path
   depends_on = [module.calico]
 }
 

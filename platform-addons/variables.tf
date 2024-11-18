@@ -1,4 +1,4 @@
-variable "shared_filesystem_path" {
+variable "cluster_filesystem_path" {
   type = string
 }
 

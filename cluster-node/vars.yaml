@@ -15,4 +15,4 @@ keepalived_virtual_address: 127.0.0.1
 keepalived_cluster_password: clusterpass
 
 # shared filesystem
-shared_filesystem_path: /data/shared/cluster
+cluster_filesystem_path: /data/shared/cluster
