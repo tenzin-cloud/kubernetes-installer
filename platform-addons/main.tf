@@ -12,7 +12,7 @@ terraform {
   }
 
   backend "local" {
-    path = "/data/shared/cluster.tfstate"
+    path = "/data/local/cluster.tfstate"
   }
 }
 
@@ -23,7 +23,7 @@ module "calico" {
 
 module "local_path_provisioner" {
   source     = "git::https://github.com/tenzin-io/terraform-modules.git//kubernetes/local-path-provisioner?ref=main"
-  local_path = "/data/shared"
+  local_path = var.shared_filesystem_path
   depends_on = [module.calico]
 }
 

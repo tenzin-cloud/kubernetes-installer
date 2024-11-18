@@ -44,7 +44,7 @@
   register: upload_certs
 
 - name: Generate worker node join command
-  shell: 'kubeadm token create --print-join-command > /data/shared/.worker-node-join'
+  shell: 'kubeadm token create --print-join-command > {{ shared_filesystem_path }}/.worker-node-join'
 
 - name: Generate control plane join command
-  shell: 'kubeadm token create --print-join-command --certificate-key {{ upload_certs.stdout_lines[-1] }} > /data/shared/.control-plane-join'
+  shell: 'kubeadm token create --print-join-command --certificate-key {{ upload_certs.stdout_lines[-1] }} > {{ shared_filesystem_path }}/.control-plane-join'

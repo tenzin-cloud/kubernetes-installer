@@ -1,7 +1,7 @@
 ---
 - name: Wait for the file to appear
   wait_for:
-    path: /data/shared/.worker-node-join
+    path: "{{ shared_filesystem_path }}/.worker-node-join"
     timeout: 300
   register: wait_result
 
@@ -12,12 +12,12 @@
 
 - name: Read the file contents
   slurp:
-    src: /data/shared/.worker-node-join
+    src: "{{ shared_filesystem_path }}/.worker-node-join"
   register: join_command
 
 - name: Decode the file contents
   set_fact:
-    script_content: "{{ join_command.content | b64decode }}"
+    script_content: "{{ join_command.content | b64decode | trim }}"
 
 - name: Execute the file as a shell script
   shell: |
