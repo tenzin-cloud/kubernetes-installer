@@ -2,13 +2,14 @@
 - name: Wait for the file to appear
   wait_for:
     path: "{{ cluster_filesystem_path }}/.control-plane-join"
+    delay: 3
     timeout: 300
   register: wait_result
 
 - name: Fail if the file did not appear in time
   fail:
     msg: "File did not appear within the 300s timeout period."
-  when: not wait_result.elapsed
+  when: wait_result.elapsed >= 300
 
 - name: Read the file contents
   slurp:
