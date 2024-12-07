@@ -2,7 +2,6 @@ variable "cluster_filesystem_path" {
   type = string
 }
 
-variable "cloudflare_tunnel_token" {
-  type      = string
-  sensitive = true
+variable "cluster_loadbalancer_ip" {
+  type = string
 }

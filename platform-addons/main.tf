@@ -27,9 +27,13 @@ module "local_path_provisioner" {
   depends_on = [module.calico]
 }
 
-# module "nginx_ingress" {
-#   source                   = "git::https://github.com/tenzin-io/terraform-modules.git//kubernetes/ingress-nginx?ref=main"
-#   nginx_service_type       = "NodePort"
-#   enable_cloudflare_tunnel = true
-#   cloudflare_tunnel_token  = var.cloudflare_tunnel_token
-# }
+module "metallb" {
+  source        = "git::https://github.com/tenzin-io/terraform-tenzin-homelab.git//kubernetes/metallb?ref=main"
+  ip_pool_range = "${var.cluster_loadbalancer_ip}/32"
+  depends_on    = [module.calico]
+}
+
+module "nginx_ingress" {
+  source     = "git::https://github.com/tenzin-io/terraform-modules.git//kubernetes/ingress-nginx?ref=main"
+  depends_on = [module.metallb]
+}
