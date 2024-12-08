@@ -16,6 +16,18 @@ terraform {
   }
 }
 
+provider "vault" {
+  address = "https://vault.tenzin.io"
+}
+
+resource "vault_kv_secret_v2" "kubeconifg" {
+  mount = "kubernetes-secrets"
+  name  = "kubeconfig/${var.cluster_name}-${var.cluster_uuid}"
+  data_json = jsonencode({
+    kubeconfig = var.kubeconfig
+  })
+}
+
 module "calico" {
   source           = "git::https://github.com/tenzin-io/terraform-modules.git//kubernetes/calico?ref=main"
   pod_cidr_network = "10.253.0.0/16"
