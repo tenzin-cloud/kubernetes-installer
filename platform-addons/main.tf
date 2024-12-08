@@ -17,7 +17,6 @@ terraform {
 }
 
 provider "vault" {
-  address = "https://vault.tenzin.io"
   auth_login_userpass {}
 }
 
