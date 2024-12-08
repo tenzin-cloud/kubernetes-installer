@@ -18,6 +18,7 @@ terraform {
 
 provider "vault" {
   address = "https://vault.tenzin.io"
+  auth_login_userpass {}
 }
 
 resource "vault_kv_secret_v2" "kubeconifg" {
@@ -26,6 +27,7 @@ resource "vault_kv_secret_v2" "kubeconifg" {
   data_json = jsonencode({
     kubeconfig = var.kubeconfig
   })
+  disable_read = true
 }
 
 module "calico" {
