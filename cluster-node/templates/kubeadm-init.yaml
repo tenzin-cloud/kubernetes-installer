@@ -6,7 +6,7 @@ apiServer:
   - name: anonymous-auth
     value: "true"
   certSANs:
-    - "{{ control_plane_endpoint_name }}.local"
+    - "{{ control_plane_endpoint_name }}"
 networking:
   serviceSubnet: "{{ service_network_cidr }}"
   podSubnet: "{{ pod_network_cidr }}"
