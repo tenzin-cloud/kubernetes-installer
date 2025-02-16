@@ -5,7 +5,11 @@ apiServer:
   extraArgs:
   - name: anonymous-auth
     value: "true"
+  certSANs:
+    - "{{ cluster_name }}.local"
 networking:
   serviceSubnet: "{{ service_network_cidr }}"
   podSubnet: "{{ pod_network_cidr }}"
+clusterName: "{{ cluster_name }}"
+controlPlaneEndpoint: "{{ cluster_name }}.local:6443"
 ...

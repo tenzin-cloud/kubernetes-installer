@@ -1,18 +1,5 @@
 # kubernetes
-node_type: bootstrap_node
 skip_phase_mark_control_plane: False
-control_plane_endpoint_name: cluster-endpoint
-control_plane_endpoint_address: 127.0.0.1
-control_plane_endpoint_alternative_names: []
-control_plane_listen_port: 8001
+cluster_name: kubernetes
 pod_network_cidr: 10.253.0.0/16
 service_network_cidr: 10.254.0.0/16
-
-# keepalived
-enable_keepalived: False
-keepalived_router_id: 100
-keepalived_virtual_address: 127.0.0.1
-keepalived_cluster_password: clusterpass
-
-# shared filesystem
-cluster_filesystem_path: /data/shared/cluster
