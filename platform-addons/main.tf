@@ -11,42 +11,58 @@ terraform {
     }
   }
 
-  backend "local" {
-    path = "/data/local/cluster.tfstate"
-  }
+  backend "local" {}
 }
 
 provider "vault" {
-  auth_login_userpass {}
+  address = var.vault_address
+  auth_login_userpass {
+    username = var.vault_username
+    password = var.vault_password
+  }
 }
 
 resource "vault_kv_secret_v2" "kubeconifg" {
   mount = "kubernetes-secrets"
-  name  = "kubeconfig/${var.cluster_name}-${var.cluster_uuid}"
+  name  = "kubeconfig/${var.cluster_name}"
   data_json = jsonencode({
-    kubeconfig = var.kubeconfig
+    kubeconfig = fileexists("/etc/kubernetes/admin.conf") ? file("/etc/kubernetes/admin.conf") : "kubeconfig not found"
   })
   disable_read = true
 }
 
-module "calico" {
-  source           = "git::https://github.com/tenzin-io/terraform-modules.git//kubernetes/calico?ref=main"
-  pod_cidr_network = "10.253.0.0/16"
+resource "helm_release" "calico" {
+  name             = "calico"
+  namespace        = "tigera-operator"
+  create_namespace = true
+  repository       = "https://projectcalico.docs.tigera.io/charts"
+  chart            = "tigera-operator"
+  version          = "v3.29.2"
+  wait             = true
+  values = [templatefile("${path.module}/templates/calico-values.yaml", {
+    pod_cidr_network = "10.253.0.0/16"
+  })]
 }
 
-module "local_path_provisioner" {
-  source     = "git::https://github.com/tenzin-io/terraform-modules.git//kubernetes/local-path-provisioner?ref=main"
-  local_path = var.cluster_filesystem_path
-  depends_on = [module.calico]
+resource "helm_release" "local_path_provisioner" {
+  name             = "local-path-provisioner"
+  namespace        = "kube-system"
+  create_namespace = false
+  repository       = "oci://ghcr.io/tenzin-io"
+  chart            = "local-path-provisioner"
+  version          = "v0.0.31"
+  wait             = true
+
+  set {
+    name  = "image.tag"
+    value = "v0.0.31"
+  }
+
+  set {
+    name  = "storageClass.defaultClass"
+    value = true
+  }
+
+  depends_on = [helm_release.calico]
 }
 
-module "metallb" {
-  source        = "git::https://github.com/tenzin-io/terraform-tenzin-homelab.git//kubernetes/metallb?ref=main"
-  ip_pool_range = "${var.cluster_loadbalancer_ip}/32"
-  depends_on    = [module.calico]
-}
-
-module "nginx_ingress" {
-  source     = "git::https://github.com/tenzin-io/terraform-modules.git//kubernetes/ingress-nginx?ref=main"
-  depends_on = [module.metallb]
-}

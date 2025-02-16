@@ -1,19 +1,4 @@
-variable "cluster_name" {
-  type = string
-}
-
-variable "cluster_uuid" {
-  type = string
-}
-
-variable "cluster_filesystem_path" {
-  type = string
-}
-
-variable "cluster_loadbalancer_ip" {
-  type = string
-}
-
-variable "kubeconfig" {
-  type = string
-}
+variable "cluster_name" { type = string }
+variable "vault_address" { type = string }
+variable "vault_username" { type = string }
+variable "vault_password" { type = string }
