@@ -5,6 +5,7 @@
 
   vars_files:
     - vars.yaml
+    - overrides.yaml
 
   tasks:
     - name: Include tasks

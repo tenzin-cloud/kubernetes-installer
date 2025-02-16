@@ -10,13 +10,13 @@
     dest: /etc/kubernetes/kubeadm-init.yaml
 
 - name: Initialize Kubernetes (skip mark-control-plane phase)
-  shell: "kubeadm init --skip-phases mark-control-plane --config /etc/kubernetes/kubeadm-init.yaml > /var/log/kubeadm-init.log"
+  shell: "kubeadm init --skip-phases mark-control-plane --config /etc/kubernetes/kubeadm-init.yaml > /var/log/kubeadm-init-output.log"
   args:
     creates: /etc/kubernetes/admin.conf
   when: skip_phase_mark_control_plane == True
 
 - name: Initialize Kubernetes (mark-control-plane phase)
-  shell: "kubeadm init --config /etc/kubernetes/kubeadm-init.yaml > /var/log/kubeadm-init.log"
+  shell: "kubeadm init --config /etc/kubernetes/kubeadm-init.yaml > /var/log/kubeadm-init-output.log"
   args:
     creates: /etc/kubernetes/admin.conf
   when: skip_phase_mark_control_plane == False
@@ -29,7 +29,7 @@
 - name: Wait for port to be ready
   wait_for:
     host: 127.0.0.1
-    port: "{{ control_plane_listen_port }}"
+    port: 6443
     delay: 30
 
 - name: Setup ease of use
@@ -43,8 +43,8 @@
   command: kubeadm init phase upload-certs --upload-certs
   register: upload_certs
 
-- name: Generate worker node join command
-  shell: 'kubeadm token create --print-join-command > {{ cluster_filesystem_path }}/.worker-node-join'
-
-- name: Generate control plane join command
-  shell: 'kubeadm token create --print-join-command --certificate-key {{ upload_certs.stdout_lines[-1] }} > {{ cluster_filesystem_path }}/.control-plane-join'
+# - name: Generate worker node join command
+#   shell: 'kubeadm token create --print-join-command > {{ cluster_filesystem_path }}/.worker-node-join'
+# 
+# - name: Generate control plane join command
+#   shell: 'kubeadm token create --print-join-command --certificate-key {{ upload_certs.stdout_lines[-1] }} > {{ cluster_filesystem_path }}/.control-plane-join'

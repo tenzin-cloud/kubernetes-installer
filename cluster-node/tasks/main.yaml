@@ -1,20 +1,9 @@
 ---
-
-- name: Add control plane endpoint name to hosts
-  lineinfile:
-    path: /etc/hosts
-    regexp: "^{{ control_plane_endpoint_address }}\\s+{{ control_plane_endpoint_name }}$"
-    line: "{{ control_plane_endpoint_address }} {{ control_plane_endpoint_name }}"
-    state: present
-
-- include_tasks: 00-keepalived-cluster.yaml
-  when: node_type == 'bootstrap_node' or node_type == 'control_plane'
-
 - include_tasks: 01-bootstrap-node.yaml
   when: node_type == 'bootstrap_node'
 
-- include_tasks: 02-control-plane-node.yaml
-  when: node_type == 'control_plane'
-
-- include_tasks: 03-worker-node.yaml
-  when: node_type == 'worker_node'
+# - include_tasks: 02-control-plane-node.yaml
+#   when: node_type == 'control_plane'
+# 
+# - include_tasks: 03-worker-node.yaml
+#   when: node_type == 'worker_node'
