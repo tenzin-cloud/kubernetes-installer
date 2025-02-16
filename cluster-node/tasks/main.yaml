@@ -1,4 +1,12 @@
 ---
+
+- name: Add control plane endpoint name to hosts
+  lineinfile:
+    path: /etc/hosts
+    regexp: "^{{ control_plane_endpoint_address }}\\s+{{ control_plane_endpoint_name }}$"
+    line: "{{ control_plane_endpoint_address }} {{ control_plane_endpoint_name }}"
+    state: present
+
 - include_tasks: 01-bootstrap-node.yaml
   when: node_type == 'bootstrap_node'
 
