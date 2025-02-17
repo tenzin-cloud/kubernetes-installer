@@ -1,7 +1,8 @@
 # kubernetes
+node_type: "bootstrap_node"
 skip_phase_mark_control_plane: False
-pod_network_cidr: 10.253.0.0/16
-service_network_cidr: 10.254.0.0/16
-cluster_name: kubernetes
-control_plane_endpoint_name: controlplane
-control_plane_endpoint_address: 127.0.0.1
+pod_network_cidr: "10.253.0.0/16"
+service_network_cidr: "10.254.0.0/16"
+cluster_name: "kubernetes"
+control_plane_endpoint_name: "controlplane"
+control_plane_endpoint_address: "127.0.0.1"
