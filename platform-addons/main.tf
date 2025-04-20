@@ -14,23 +14,6 @@ terraform {
   backend "local" {}
 }
 
-provider "vault" {
-  address = var.vault_address
-  auth_login_userpass {
-    username = var.vault_username
-    password = var.vault_password
-  }
-}
-
-resource "vault_kv_secret_v2" "kubeconifg" {
-  mount = "kubernetes-secrets"
-  name  = "kubeconfig/${var.cluster_name}"
-  data_json = jsonencode({
-    kubeconfig = fileexists("/etc/kubernetes/admin.conf") ? file("/etc/kubernetes/admin.conf") : "kubeconfig not found"
-  })
-  disable_read = true
-}
-
 resource "helm_release" "calico" {
   name             = "calico"
   namespace        = "tigera-operator"
@@ -65,4 +48,3 @@ resource "helm_release" "local_path_provisioner" {
 
   depends_on = [helm_release.calico]
 }
-
