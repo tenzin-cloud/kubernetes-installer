@@ -1,0 +1,9 @@
+---
+#
+# Install Cilium CLI
+#
+- name: Unarchive Cilium tarball
+  unarchive:
+    src: "https://github.com/cilium/cilium-cli/releases/download/v{{ cilium_cli_version }}/cilium-{{ node_os }}-{{ node_arch }}.tar.gz"
+    dest: /usr/local/bin
+    remote_src: yes 
