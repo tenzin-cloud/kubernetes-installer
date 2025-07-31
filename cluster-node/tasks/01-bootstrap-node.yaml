@@ -1,4 +1,10 @@
 ---
+- name: Add localhost entry for cluster
+  lineinfile:
+    path: /etc/hosts
+    search_string: '127.0.0.10'
+    line: '127.0.0.10 {{ cluster_name }}.local'
+
 - name: Create /etc/kubernetes folder
   file:
     path: /etc/kubernetes
@@ -42,6 +48,16 @@
 - name: Upload control plane certs
   command: kubeadm init phase upload-certs --upload-certs
   register: upload_certs
+
+- name: Install Cilium to cluster
+  command: "cilium install --version {{ cilium_version }}"
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
+
+- name: Wait for Cilium installation to complete
+  command: "cilium status --wait"
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
 
 # - name: Generate worker node join command
 #   shell: 'kubeadm token create --print-join-command > {{ cluster_filesystem_path }}/.worker-node-join'
