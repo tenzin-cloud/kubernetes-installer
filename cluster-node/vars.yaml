@@ -1,7 +1,0 @@
-# kubernetes
-node_type: "bootstrap_node"
-skip_phase_mark_control_plane: False
-pod_network_cidr: "10.253.0.0/16"
-service_network_cidr: "10.254.0.0/16"
-cluster_name: "kubernetes"
-cilium_version: "1.18.0"

@@ -1,12 +1,72 @@
 ---
-- name: Prepare system
-  hosts: cluster_nodes
+- name: Setup Kubernetes bootstrap node
+  hosts: bootstrap_node
+  gather_facts: false
   become: true
-
-  vars_files:
-    - vars.yaml
-    - overrides.yaml
-
+  vars:
+    cilium_version: "1.18.0"
   tasks:
-    - name: Include tasks
-      include_tasks: tasks/main.yaml
+    - name: Get bootstrap node IP details
+      setup:
+        gather_subset:
+          - default_ipv4
+
+    - name: Set cluster name
+      set_fact:
+        cluster_name: '{{ inventory_hostname }}'
+
+    - name: Send over kubeadm config file
+      template:
+        src: kubeadm-init.yaml
+        dest: /var/tmp/kubeadm-init.yaml
+
+    - name: Initialize Kubernetes (mark-control-plane phase)
+      shell: "kubeadm init --config /var/tmp/kubeadm-init.yaml > /var/log/kubeadm-init-output.log"
+      args:
+        creates: /etc/kubernetes/admin.conf
+
+    - name: Wait for port to be ready
+      wait_for:
+        host: 127.0.0.1
+        port: 6443
+        delay: 30
+
+    - name: Install Cilium to cluster
+      command: "cilium install --version {{ cilium_version }}"
+      environment:
+        KUBECONFIG: /etc/kubernetes/admin.conf
+
+    - name: Wait for Cilium installation to complete
+      command: "cilium status --wait"
+      environment:
+        KUBECONFIG: /etc/kubernetes/admin.conf
+
+    - name: Get cluster join command for worker nodes
+      command: kubeadm token create --print-join-command
+      register: join_cmd_output
+
+    - name: Set cluster join command as host fact
+      set_fact:
+        worker_join_command: "{{ join_cmd_output.stdout }}"
+
+- name: Join worker nodes to cluster
+  hosts: worker_nodes
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Set cluster facts
+      set_fact:
+        cluster_name: "{{ hostvars[groups['bootstrap_node'][0]]['cluster_name'] }}"
+        cluster_address: "{{ hostvars[groups['bootstrap_node'][0]]['ansible_facts']['default_ipv4']['address'] }}"
+        cluster_join_command: "{{ hostvars[groups['bootstrap_node'][0]]['worker_join_command'] }}"
+
+    - name: Add hosts entry for cluster name
+      lineinfile:
+        path: /etc/hosts
+        search_string: '{{ cluster_address }}'
+        line: '{{ cluster_address }} {{ cluster_name }}'
+
+    - name: Join cluster as worker node
+      command: '{{ cluster_join_command }}'
+      args:
+        creates: /etc/kubernetes/kubelet.conf
