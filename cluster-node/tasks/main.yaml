@@ -1,9 +1,0 @@
----
-- include_tasks: 01-bootstrap-node.yaml
-  when: node_type == 'bootstrap_node'
-
-# - include_tasks: 02-control-plane-node.yaml
-#   when: node_type == 'control_plane'
-# 
-# - include_tasks: 03-worker-node.yaml
-#   when: node_type == 'worker_node'
