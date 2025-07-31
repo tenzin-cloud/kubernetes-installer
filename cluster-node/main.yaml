@@ -29,12 +29,14 @@
       wait_for:
         host: 127.0.0.1
         port: 6443
-        delay: 30
+        delay: 5
 
     - name: Install Cilium to cluster
       command: "cilium install --version {{ cilium_version }}"
       environment:
         KUBECONFIG: /etc/kubernetes/admin.conf
+      args:
+        creates: /etc/cni/net.d/05-cilium.conflist
 
     - name: Wait for Cilium installation to complete
       command: "cilium status --wait"
