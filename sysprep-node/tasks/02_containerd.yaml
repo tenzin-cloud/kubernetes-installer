@@ -5,7 +5,7 @@
 #
 - name: Extract containerd tarball
   unarchive:
-    src: "https://github.com/containerd/containerd/releases/download/v{{ containerd_version }}/containerd-{{ containerd_version }}-{{ containerd_os }}-{{ containerd_arch }}.tar.gz"
+    src: "https://github.com/containerd/containerd/releases/download/v{{ containerd_version }}/containerd-{{ containerd_version }}-{{ node_os }}-{{ node_arch }}.tar.gz"
     dest: /usr/local/
     remote_src: yes
 
@@ -33,7 +33,7 @@
 
 - name: Extract crictl tarball
   unarchive:
-    src: "https://github.com/kubernetes-sigs/cri-tools/releases/download/v{{ crictl_version }}/crictl-v{{ crictl_version }}-{{ crictl_os }}-{{ crictl_arch }}.tar.gz"
+    src: "https://github.com/kubernetes-sigs/cri-tools/releases/download/v{{ crictl_version }}/crictl-v{{ crictl_version }}-{{ node_os }}-{{ node_arch }}.tar.gz"
     dest: /usr/local/bin
     remote_src: yes
 

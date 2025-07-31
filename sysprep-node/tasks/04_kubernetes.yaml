@@ -20,19 +20,19 @@
 
 - name: Install kubeadm
   get_url:
-    url: "{{ lookup('eks_release', 'kubeadm', eks_release_arch, eks_release_os) }}"
+    url: "https://dl.k8s.io/release/v{{ kubernetes_version }}/bin/{{ node_os }}/{{ node_arch }}/kubeadm"
     dest: /usr/bin/kubeadm
     mode: 0755
 
 - name: Install kubelet
   get_url:
-    url: "{{ lookup('eks_release', 'kubelet', eks_release_arch, eks_release_os) }}"
+    url: "https://dl.k8s.io/release/v{{ kubernetes_version }}/bin/{{ node_os }}/{{ node_arch }}/kubelet"
     dest: /usr/bin/kubelet
     mode: 0755
 
 - name: Install kubectl
   get_url:
-    url: "{{ lookup('eks_release', 'kubectl', eks_release_arch, eks_release_os) }}"
+    url: "https://dl.k8s.io/release/v{{ kubernetes_version }}/bin/{{ node_os }}/{{ node_arch }}/kubectl"
     dest: /usr/bin/kubectl
     mode: 0755
 

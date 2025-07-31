@@ -9,6 +9,6 @@
 
 - name: Unarchive cni-plugins tarball
   unarchive:
-    src: "https://github.com/containernetworking/plugins/releases/download/v{{ cni_plugins_version }}/cni-plugins-{{ cni_plugins_os }}-{{ cni_plugins_arch }}-v{{ cni_plugins_version }}.tgz"
+    src: "https://github.com/containernetworking/plugins/releases/download/v{{ cni_plugins_version }}/cni-plugins-{{ node_os }}-{{ node_arch }}-v{{ cni_plugins_version }}.tgz"
     dest: /opt/cni/bin
     remote_src: yes 

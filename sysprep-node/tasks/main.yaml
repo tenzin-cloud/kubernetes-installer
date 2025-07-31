@@ -13,3 +13,6 @@
 
 - name: Install kubeadm, kubelet, kubectl binaries
   include_tasks: 04_kubernetes.yaml
+
+- name: Install Cilium CLI
+  include_tasks: 05_cilium.yaml

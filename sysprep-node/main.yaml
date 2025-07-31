@@ -1,7 +1,11 @@
 ---
 - name: Prepare system
-  hosts: localhost
-  connection: local
+  hosts: kubernetes_nodes
+  become: true
+
+  vars:
+    node_os: linux
+    node_arch: amd64
 
   vars_files:
     - vars.yaml

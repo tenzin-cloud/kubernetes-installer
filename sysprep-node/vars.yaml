@@ -1,21 +1,9 @@
-eks_release_url: https://distro.eks.amazonaws.com/kubernetes-1-32/kubernetes-1-32-eks-11.yaml
-eks_release_arch: amd64 # amd64 or arm64
-eks_release_os: linux
-
+kubernetes_version: 1.32.3
 containerd_version: 2.0.5
-containerd_os: linux
-containerd_arch: amd64 # amd64 or arm64
-
 runc_version: 1.2.6
-runc_arch: amd64 # amd64 or arm64
-
 cni_plugins_version: 1.6.2
-cni_plugins_arch: amd64 # amd64 or arm64
-cni_plugins_os: linux
-
 crictl_version: 1.32.0
-crictl_arch: amd64 # amd64 or arm64
-crictl_os: linux
+cilium_cli_version: 0.18.6
 
 docker_hub_user: ""
 docker_hub_token: ""
