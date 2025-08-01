@@ -110,6 +110,3 @@
     name: kubelet
     state: started
     enabled: yes
-
-- name: Pull the kubeadm images
-  command: kubeadm config images pull
