@@ -1,3 +1,4 @@
+#!/usr/bin/env ansible-playbook
 ---
 - name: Prepare system
   hosts: kubernetes_nodes
