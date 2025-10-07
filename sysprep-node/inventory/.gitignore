@@ -2,5 +2,6 @@
 *
 
 # however, don't ignore specific files
+!README.md
 !.gitignore
 !default
