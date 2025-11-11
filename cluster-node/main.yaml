@@ -5,7 +5,7 @@
   gather_facts: false
   become: true
   vars:
-    cilium_version: "1.18.0"
+    cilium_version: "1.18.1"
   tasks:
     - name: Get bootstrap node IP details
       setup:
