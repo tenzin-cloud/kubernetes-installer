@@ -9,7 +9,7 @@ all:
     cni_plugins_version: 1.9.1
     crictl_version: 1.36.0
     cilium_cli_version: 0.19.5
-    etcd_version: 3.6.12
+    etcd_version: 3.6.13
     helm_version: 4.2.2
 
     tailscale_enabled: false
@@ -18,5 +18,4 @@ all:
   children:
     kubernetes_nodes:
       hosts:
-        cluster-1.local: {}
-        cluster-2.local: {}
+        cks-1.local: {}
